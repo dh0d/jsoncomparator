@@ -1,0 +1,6 @@
+test.py
+jsoncomparator.egg-info/
+jsoncomparator/__pycache__/
+tests/__pycache__/
+.vscode/
+.eggs/
