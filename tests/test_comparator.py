@@ -89,3 +89,8 @@ def test_diff_list(comparator):
     status, details = comparator.compare({'a':[1, 2]}, {'a':[2, 1]})
     assert status == False
     assert details == {'changed': {'a': {'new': [2, 1], 'old': [1, 2]}}}
+
+def test_deep_diff(comparator):
+    status, details = comparator.compare({'a1':{'a2':{'a3':'b'}}}, {'a1':{'a2':{'a3':'c'}}})
+    assert status == False
+    assert details == {'changed': {'a1': {'changed':{'a2':{'changed':{'a3':{'new':'c', 'old': 'b'}}}}}}}

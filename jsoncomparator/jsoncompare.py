@@ -1,3 +1,4 @@
+from typing import Tuple, Dict, List
 import json
 from multimethod import multimethod
 
@@ -6,24 +7,24 @@ class Comparator():
         pass
      
     @multimethod
-    def compare(self, list_one: list, list_two: list):
+    def compare(self, list_one: List, list_two: List) -> Tuple[bool, Dict]:
         return self._compare_lists(list_one, list_two)
     
     @multimethod
-    def compare(self, dict_one: dict, dict_two: dict):
+    def compare(self, dict_one: Dict, dict_two: Dict) -> Tuple[bool, Dict]:
         return self._compare_dicts(dict_one, dict_two)
 
     @multimethod
     def compare(self, one, two):
         raise TypeError
 
-    def _compare_lists(self, list_one: list, list_two: list):
+    def _compare_lists(self, list_one: List, list_two: List) -> Tuple[bool, Dict]:
         if list_one == list_two:
             return True, {}
         else:
             return False, {'old': list_one, 'new': list_two}
 
-    def _compare_dicts(self, dict_one, dict_two):
+    def _compare_dicts(self, dict_one: Dict, dict_two: Dict) -> Tuple[bool, Dict]:
         status = True
         details = {}
 
@@ -49,15 +50,15 @@ class Comparator():
         return status, details
 
     @multimethod
-    def _compare_element(self, old: dict, new: dict):
+    def _compare_element(self, old: Dict, new: Dict) -> Tuple[bool, Dict]:
         return self._compare_dicts(new, old)
 
     @multimethod
-    def _compare_element(self, old: list, new: list):
+    def _compare_element(self, old: List, new: List) -> Tuple[bool, Dict]:
         return self._compare_lists(old, new)
 
     @multimethod
-    def _compare_element(self, old, new):
+    def _compare_element(self, old, new) -> Tuple[bool, Dict]:
         if type(old) == type(new) and old == new:
             return True, {}
         else:
