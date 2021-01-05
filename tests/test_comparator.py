@@ -29,7 +29,7 @@ def test_with_empty(comparator):
 
     status, details = comparator.compare([{}],[{},{}])
     assert status == False
-    assert details == {'new': [{},{}], 'old': [{}]}
+    assert details == {'added': [{}]}
 
     with pytest.raises(TypeError):
         status, details = comparator.compare([],{})
@@ -58,7 +58,7 @@ def test_diff_value(comparator):
     
     status, details = comparator.compare({'a':['b']}, {'a': ['c']})
     assert status == False
-    assert details == {'changed': {'a': {'new': ['c'], 'old': ['b']}}}
+    assert details == {'changed': {'a': {'added': ['c'], 'removed': ['b']}}}
 
     status, details = comparator.compare({'a':['b']}, {'a': {'b'}})
     assert status == False
@@ -76,19 +76,31 @@ def test_with_null(comparator):
 def test_diff_list(comparator):
     status, details = comparator.compare({'a':['b']}, {'a':['c']})
     assert status == False
-    assert details == {'changed': {'a': {'new': ['c'], 'old': ['b']}}}
+    assert details == {'changed': {'a': {'added': ['c'], 'removed': ['b']}}}
 
     status, details = comparator.compare({'a':[1]}, {'a':[2]})
     assert status == False
-    assert details == {'changed': {'a': {'new': [2], 'old': [1]}}}
+    assert details == {'changed': {'a': {'added': [2], 'removed': [1]}}}
 
     status, details = comparator.compare({'a':[1]}, {'a':[1, 2]})
     assert status == False
-    assert details == {'changed': {'a': {'new': [1, 2], 'old': [1]}}}
+    assert details == {'changed': {'a': {'added': [2]}}}
 
     status, details = comparator.compare({'a':[1, 2]}, {'a':[2, 1]})
+    assert status == True
+    assert details == {}
+
+    status, details = comparator.compare({'a':[1]}, {'a':[1, 1]})
     assert status == False
-    assert details == {'changed': {'a': {'new': [2, 1], 'old': [1, 2]}}}
+    assert details == {'changed': {'a': {'added': [1]}}}    
+
+    status, details = comparator.compare({'a':[1]}, {'a':[1, 1, 2, 2]})
+    assert status == False
+    assert details == {'changed': {'a': {'added': [1, 2, 2]}}}    
+
+    status, details = comparator.compare({'a':[1,3,4,5,5]}, {'a':[1,2,1,7,3,7]})
+    assert status == False
+    assert details == {'changed': {'a': {'added': [1, 2, 7, 7], 'removed': [4, 5, 5]}}}    
 
 def test_deep_diff(comparator):
     status, details = comparator.compare({'a1':{'a2':{'a3':'b'}}}, {'a1':{'a2':{'a3':'c'}}})
