@@ -24,13 +24,13 @@ class Comparator():
 
         for i in range(0, len(list_one)):
             diff = list_one.count(list_one[i]) - list_two.count(list_one[i])
-            if diff > 0 and list_one[i] not in details.setdefault('removed',[]):
+            if diff > 0 and list_one[i] not in details.setdefault('removed', []):
                 status = False
                 details['removed'].extend([list_one[i]] * diff)
             
         for i in range(0, len(list_two)):
             diff = list_two.count(list_two[i]) - list_one.count(list_two[i])
-            if  diff > 0 and list_two[i] not in details.setdefault('added',[]):
+            if  diff > 0 and list_two[i] not in details.setdefault('added', []):
                 status = False
                 details['added'].extend([list_two[i]] * diff)
 
