@@ -106,3 +106,8 @@ def test_deep_diff(comparator):
     status, details = comparator.compare({'a1':{'a2':{'a3':'b'}}}, {'a1':{'a2':{'a3':'c'}}})
     assert status == False
     assert details == {'changed': {'a1': {'changed':{'a2':{'changed':{'a3':{'new':'c', 'old': 'b'}}}}}}}
+
+def test_deep_dict(comparator):
+    status, details = comparator.compare({'person':{'name':'David', 'age': 23}}, {'person':{'name':'David', 'gender': 'male'}})
+    assert status == False
+    assert details == {'changed': {'person': {'removed':{'age': 23}, 'added':{'gender': 'male'}}}}
