@@ -61,7 +61,7 @@ class Comparator():
 
     @multimethod
     def _compare_element(self, old: Dict, new: Dict) -> Tuple[bool, Dict]:
-        return self._compare_dicts(new, old)
+        return self._compare_dicts(old, new)
 
     @multimethod
     def _compare_element(self, old: List, new: List) -> Tuple[bool, Dict]:
